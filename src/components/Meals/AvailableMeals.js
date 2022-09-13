@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import Card from "../UI/Card"
 import "./AvailableMeals.css"
 import MealItem from "./MealItem/MealItem"
@@ -29,7 +30,30 @@ const DUMMY_MEALS = [
 ]
 
 const AvailableMeals = (props) => {
-  const mealList = DUMMY_MEALS.map(meal => <MealItem
+  let [meals, setMeals] = useState([])
+  useEffect(() => {
+    async function fetchData () {
+      // You can await here
+
+      let xx = await fetch("https://bellatest1-7d966-default-rtdb.europe-west1.firebasedatabase.app/xx.json")
+      let json = await xx.json()
+      console.log(json)
+      let result = []
+      for (const key in json) {
+        result.push(json[key])
+      }
+      setMeals(result)
+    }
+    fetchData()
+
+
+    //https://bellatest1-7d966-default-rtdb.europe-west1.firebasedatabase.app/xx.json
+    // fetch("https://bellatest1-7d966-default-rtdb.europe-west1.firebasedatabase.app/xx.json").then(value => {
+    //   console.log(value)
+    // })
+
+  }, [])
+  const mealList = meals.map(meal => <MealItem
     id={meal.id}
     key={meal.id}
     name={meal.name}
